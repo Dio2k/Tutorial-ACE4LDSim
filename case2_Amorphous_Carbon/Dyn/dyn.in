@@ -1,0 +1,21 @@
+units               metal
+processors          * * *
+boundary            p p p
+atom_style          atomic
+atom_modify         map yes
+
+## 
+read_data           aC-opt.data
+
+pair_style          pace
+pair_coeff          * * aC.yace C
+mass                1  12.011
+
+##
+group               core id 1:512
+neighbor            0.01 bin
+
+print               'calculating calculate_dynmat'
+dynamical_matrix    core eskm 0.00001 file Dyn.form binary no fold yes
+print               'calculating third_order'
+third_order         core eskm 0.00001 file THIRD binary no fold yes

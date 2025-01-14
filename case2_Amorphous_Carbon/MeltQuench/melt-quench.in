@@ -1,0 +1,73 @@
+echo screen
+# melt-quench 
+
+atom_modify map yes     # must set for dynamical_matrix command
+
+
+# variable
+variable    t1 equal 8000       # randomized temerature
+variable    t2 equal 5000       # melt temerature
+variable    t  equal 300        # temerature
+variable    DT equal 0.001     # timestep 0.5 fs
+
+# basic settings
+units           metal
+dimension       3
+boundary        p p p
+atom_style      atomic
+# neighbor        2. nsq
+
+## 
+read_data       cubicC.data
+
+pair_style      pace
+pair_coeff      * * aC.yace C
+mass            1  12.011
+
+##
+velocity        all create ${t1} 666 mom no rot no dist gaussian
+dump            mydump all atom 5000 ./mq.trj
+
+## random
+fix             1 all nvt temp ${t1} ${t1} $(100.0*dt)
+timestep        ${DT}  
+thermo_style    custom step temp press vol ke pe etotal
+thermo          2000
+run             100000
+unfix           1
+write_data      melt-${t1}.data
+
+# 2 - 2nd equilibration run at t2
+fix             2 all nvt temp ${t2} ${t2} $(100.0*dt)
+timestep        ${DT}  
+thermo_style    custom step temp press vol ke pe etotal
+thermo          2000
+run             100000
+unfix           2
+write_data      quenched-${t2}.data
+
+# 3 - quench
+fix             3 all nvt temp ${t2} ${t} $(100.0*dt)
+timestep        ${DT}  
+thermo_style    custom step temp press vol ke pe etotal
+thermo          1000
+run             1000
+unfix           3
+write_data      annealed-${t}.data
+
+# 4 - 3rd equilibration run at t
+fix             4 all nvt temp ${t} ${t} $(100.0*dt)
+timestep        ${DT}  
+thermo_style    custom step temp press vol ke pe etotal
+thermo          2000
+run             99900
+dump            stable all atom 1 ./mq-stab.trj
+run             100    
+undump          stable
+unfix           4
+write_data      equilibrated-${t}.data
+
+# min (similar as relax)
+min_style       cg
+minimize        0 0 5000 10000
+write_data      aC-opt.data
