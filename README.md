@@ -1,6 +1,6 @@
 ## Introduction 
 
-`Tutorial-ACE4LDSim` is the repository for the tutorial article "Lattice Dynamics Modeling of Thermal Transport in Solids Using Machine-Learner Atomic Cluster Expansion Potentials: A Tutorial" (Unpublished). This repository includes all the data, codes and scripts necessary to reproduce the results presented in the tutorial. Some precalculated data of this repository can be accessed at [zenodo](https://zenodo.org/records/14642844), which can be fetched with the codes in `code_available.ipynb`
+**Tutorial-ACE4LDSim** is the repository for the tutorial article "Lattice Dynamics Modeling of Thermal Transport in Solids Using Machine-Learner Atomic Cluster Expansion Potentials: A Tutorial" (Unpublished). This repository includes all the data, codes and scripts necessary to reproduce the results presented in the tutorial. Some precalculated data of this repository can be accessed at [zenodo](https://zenodo.org/records/14642844), which can be fetched with the codes in `code_available.ipynb`
 
 ## Environment
 
